@@ -1,23 +1,23 @@
 ## Overview
 
-- Question 1: [`async` and `defer` execution order](#1-put-the-scripts-in-the-right-order-of-execution)
-- Question 2: [Rendering Pipeline and Compositing](#2-which-statements-are-true)
-- Question 3: [Resolving Domain Requests](#3-fill-in-the-gaps)
-- Question 4: [Call Stack & Event Loop](#4-what-gets-logged)
-- Question 5: [Resource Hints](#5-match-the-resource-hints-with-their-definitions)
-- Quesiton 6: [Object Reference & Destructuring](#6-whats-the-output)
-- Question 7: [`PerformanceNavigationTiming`](#7-put-the-performancenavigationtimings-in-the-right-order)
+- ✅Question 1: [`async` and `defer` execution order](#1-put-the-scripts-in-the-right-order-of-execution)
+- ✅Question 2: [Rendering Pipeline and Compositing](#2-which-statements-are-true)
+- ✅Question 3: [Resolving Domain Requests](#3-fill-in-the-gaps)
+- ✅Question 4: [Call Stack & Event Loop](#4-what-gets-logged)
+- ✅Question 5: [Resource Hints](#5-match-the-resource-hints-with-their-definitions)
+- ✅Quesiton 6: [Object Reference & Destructuring](#6-whats-the-output)
+- ✅Question 7: [`PerformanceNavigationTiming`](#7-put-the-performancenavigationtimings-in-the-right-order)
 - Question 8: [Cache Directives](#8-match-the-caching-directives-to-their-definitions)
-- Question 9: [Garbage Collection](#9-what-statements-are-true-about-this-code-block)
+- ✅Question 9: [Garbage Collection](#9-what-statements-are-true-about-this-code-block)
 - Question 10: [Animation Cost](10-when-animating-the-following-properties-which-have-the-correctly-listed-rendering-costs)
-- Question 11: [Event Propagation](#11-what-gets-logged-when-clicking-button)
+- ✅Question 11: [Event Propagation](#11-what-gets-logged-when-clicking-button)
 - Question 12: [CSS Specificity](#12-order-the-css-selectors-by-ascending-specificity)
-- Question 13: [`WeakMap`](#13-what-statements-are-true)
+- ✅Question 13: [`WeakMap`](#13-what-statements-are-true)
 - Question 14: [Web Vitals](#14-match-the-web-vitals-to-the-correct-descriptions)
 - Question 15: [Content Security Policy](#15-which-resources-will-be-allowed-with-the-following-csp-header)
-- Question 16: [Referrer Policies](#16-which-statements-are-true)
-- Question 17: [Generators](#17-when-does-in-log-my-input-get-logged)
-- Question 18: [Promise Methods](#18-connect-the-promise-methods-to-the-right-output)
+- ✅Question 16: [Referrer Policies](#16-which-statements-are-true)
+- ✅Question 17: [Generators](#17-when-does-in-log-my-input-get-logged)
+- ✅Question 18: [Promise Methods](#18-connect-the-promise-methods-to-the-right-output)
 - Question 19: [Back-Forward Cache](#19-which-of-the-following-values-will-always-make-your-page-ineligible-for-bfcache)
 - Question 20: [XSS, MITM, CSRF, Clickjacking](#20-connect-the-terms-with-their-definitions)
 - Question 21: [Font Strategies](#21-connect-the-font-strategies-to-their-definition)
@@ -27,9 +27,9 @@
 - Question 25: [Render Layers](#25-which-of-the-following-properties-causes-the-element-to-be-promoted-to-its-own-renderlayer)
 - Question 26: [Image Formats](#26-match-the-image-formats-to-the--descriptions)
 - Question 27: [CORS](#27-what-is-true-about-the-following-cors-config)
-- Question 28: [Event Loop](#28-what-gets-logged)
+- ✅Question 28: [Event Loop](#28-what-gets-logged)
 - Question 29: [HTTP/1, HTTP/2, HTTP/3](#29-what-statements-are-correct)
-- Question 30: [`this` keyword](#30-what-gets-logged)
+- ✅Question 30: [`this` keyword](#30-what-gets-logged)
 
 ---
 
@@ -300,7 +300,7 @@ Further reading:
 - F. `domInteractive`
 
 <details>
-<summary>💡 <b>Resources</b></summary>
+<summary><b>Answer</b></summary>
  <br />
 
 Answer:
@@ -384,12 +384,18 @@ obj2 = null;
 - D. `obj1` and `obj2` can be garbage collected during the next garbage collection cycle
 
 <details>
-<summary>💡 <b>Resources</b></summary>
+<summary><b>Answer</b></summary>
  <br />
 
-Answer:
+Answer: D
 
-- [**Watch Answer & Explanation**](https://frontendmasters.com/courses/web-dev-quiz/q9-garbage-collection/)
+![Alt text](/images/gc.png)
+
+- the call stack is where the global execution context and function execution contexts are stored
+- the heap is where dynamically allocated memory is stored
+- when we set the global context to null, objects get removed from global context but obj1 and obj2 still has a reference to each other
+- in modern browsers, when the object is not reachable from the global context, it is marked for garbage collection (through a mark and sweep algo)
+- in older browsers, the use a reference counting algo, where the object is only garbage collected when the reference count is 0
 
 Further reading:
 
@@ -461,12 +467,19 @@ button.addEventListener("click", () => log("G"), true);
 - E. `A` `C` `G` `F` `D` `E`
 
 <details>
-<summary>💡 <b>Resources</b></summary>
+<summary><b>Answer</b></summary>
+
  <br />
 
-Answer:
+Answer: E
 
-- [**Watch Answer & Explanation**](https://frontendmasters.com/courses/web-dev-quiz/q11-event-propagation/)
+- There are 3 phases in event propagation: capturing, target, and bubbling
+- Capturing phase: the event is first captured by the outermost element and propagated to the innermost element
+- Target phase: the event is fired on the target element
+- Bubbling phase: the event is propagated back to the outermost element
+- The default value for the `useCapture` parameter (3rd param) is `false`, which means that the event is fired in the bubbling phase
+- The `stopPropagation` method prevents the event from propagating further (in this case, it prevents the event from propagating to the next element in the bubbling phase `console.log('B')`)
+  ![Alt text](/images/eventpropagation.png)
 
 Further reading:
 
@@ -524,12 +537,14 @@ userTokenMap.set(user, "secret_token");
 - D. `[...userTokenMap]` returns an array of `userTokenMap` entries
 
 <details>
-<summary>💡 <b>Resources</b></summary>
+<summary><b>Answer</b></summary>
  <br />
 
-Answer:
+Answer: C
 
-- [**Watch Answer & Explanation**](https://frontendmasters.com/courses/web-dev-quiz/q13-weakmap/)
+- WeakMap is a collection of key/value pairs in which the keys are weakly referenced
+- when the key is garbage collected, the value is also garbage collected
+- use cases: storing private data for an object, memoization, etc.
 
 Further reading:
 
@@ -615,12 +630,15 @@ Further reading:
 - E. The default `Referrer-Policy` is `no-referrer-when-downgrade`
 
 <details>
-<summary>💡 <b>Resources</b></summary>
+<summary><b>Answer</b></summary>
  <br />
 
-Answer:
+Answer: B, D
 
-- [**Watch Answer & Explanation**](https://frontendmasters.com/courses/web-dev-quiz/q16-refer-policies)
+- `rel="noopener"` is used to prevent the newly opened page from accessing the `window` object of the original page (implied when using `target="_blank"` on modern browsers)
+- `rel="noreferrer"` can be used to prevent the newly opened page from accessing the `window` object of the original page
+- both can be used with http and https
+- now it is `strict-origin-when-cross-origin`
 
 Further reading:
 
@@ -651,12 +669,17 @@ const it = generatorFunc();
 - D. `it.next()` `it.next()`
 
 <details>
-<summary>💡 <b>Resources</b></summary>
+<summary><b>Answer</b></summary>
  <br />
 
-Answer:
+Answer: C
 
-- [**Watch Answer & Explanation**](https://frontendmasters.com/courses/web-dev-quiz/q17-generators/)
+- generator functions are functions that can be exited and later re-entered
+- when a generator function is called, it returns an iterator object that can be used to control the execution of the generator function
+- the `next()` method returns an object with two properties: `value` and `done`
+
+- calling `next()` with a value will resume the generator function execution and return the value passed to the `yield` expression (in this case it finds `yield "My input!"` and returns `{value: "My input!", done: false}`)
+- calling `.next('My input!')` now will log `"In log: My input!"`
 
 Further reading:
 
@@ -696,12 +719,19 @@ Promise[❓]
 4. `Result: 2`
 
 <details>
-<summary>💡 <b>Resources</b></summary>
+<summary><b>Answer</b></summary>
  <br />
 
 Answer:
+all -> error:3
+race -> result:2
+any -> result:2
+allSettled -> result: [{}, {}, {}, {}]
 
-- [**Watch Answer & Explanation**](https://frontendmasters.com/courses/web-dev-quiz/q18-promise-methods/)
+- `Promise.all()` returns a promise that resolves when all of the promises in the iterable argument have resolved, or rejects with the reason of the first passed promise that rejects. (In this case the first promise that rejects is the one that returns error:3)
+- `Promise.race()` waits for the first promise to settle, and then it passes its result to the corresponding handler (in this case the first promise that resolves is the one that returns result:2, when 2 promises take the same time to resolve, the first one to be declared takes precedence)
+- `Promise.any()` returns a single promise that resolves as soon as any of the promises in the iterable resolves, or rejects if all of the promises reject. (In this case the first promise that resolves is the one that returns result:2)
+- `Promise.allSettled()` returns a promise that resolves after all of the given promises have either resolved or rejected, with an array of objects that each describes the outcome of each promise. (In this case all promises resolve, so the result is an array of objects)
 
 Further reading:
 
@@ -1014,12 +1044,10 @@ Promise.resolve().then(() => Promise.resolve().then(() => console.log(4)));
 - D. `2` `3` `1` `4`
 
 <details>
-<summary>💡 <b>Resources</b></summary>
+<summary><b>Answer</b></summary>
  <br />
 
-Answer:
-
-- [**Watch Answer & Explanation**](https://frontendmasters.com/courses/web-dev-quiz/q28-event-loop/)
+Answer: C
 
 Further reading:
 
@@ -1090,12 +1118,13 @@ objB.baz();
 - E. `B` `undefined` `B`
 
 <details>
-<summary>💡 <b>Resources</b></summary>
+<summary><b>Answer</b></summary>
  <br />
 
-Answer:
+Answer: B
 
-- [**Watch Answer & Explanation**](https://frontendmasters.com/courses/web-dev-quiz/q28-event-loop/)
+- `this` is the execution context of the function
+- referencing a function does not mean that the function is invoked with the same `this` value as the object it is attached to (calling `foo: objA.foo` from objB is invoked by objB, so `this` is objB )
 
 Further reading:
 
